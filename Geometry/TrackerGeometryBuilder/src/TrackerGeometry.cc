@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
-
+ 
 namespace {
   GeomDetEnumerators::SubDetector
   geometricDetToGeomDet(GeometricDet::GDEnumType gdenum) {

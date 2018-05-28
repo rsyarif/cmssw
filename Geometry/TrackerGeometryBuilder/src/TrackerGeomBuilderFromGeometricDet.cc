@@ -16,7 +16,7 @@
 #include "DataFormats/GeometrySurface/interface/MediumProperties.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Utilities/interface/Exception.h"
-
+ 
 #include <cfloat>
 #include <cassert>
 using std::vector;

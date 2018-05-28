@@ -47,15 +47,18 @@ initialize(const edm::EventSetup& es) {
   if (mod) { 
     // redo indexing!
     theCabling = qualityHandle->cabling();
-    assert(theCabling); 
-    auto const & conn = cabling()->connected();
-    COUT << "cabling " << conn.size() << std::endl;
-    detIds.clear();
-    detIds.reserve(conn.size());
-    for (auto const & c : conn) { if (!isModuleBad(c.first)) detIds.push_back(c.first);}
-    indices.clear();
-    indices.resize(detIds.size());
-    COUT << "good detIds " << detIds.size() << std::endl;
+    if ( ! theCabling ) {
+      edm::LogError("StripClusterizerAlgorithm") << "No valid SiStripDetCabling found through SiStripQuality... on-demand clustering will not work";
+    } else {
+      auto const & conn = cabling()->connected();
+      COUT << "cabling " << conn.size() << std::endl;
+      detIds.clear();
+      detIds.reserve(conn.size());
+      for (auto const & c : conn) { if (!isModuleBad(c.first)) detIds.push_back(c.first);}
+      indices.clear();
+      indices.resize(detIds.size());
+      COUT << "good detIds " << detIds.size() << std::endl;
+    }
 
     if (0==detIds.size()) return;
 
@@ -132,12 +135,24 @@ findDetId(const uint32_t id) const {
   auto e = detIds.end();
   auto p = std::lower_bound(b,e,id);
   if (p==e || id!=(*p)) {
+    if ( ! cabling() ) {
+      // no cabling, cannot rely on cached indices
+      Det det;
+      det.ind = 0; // != invalidI
+      det.detId = id;
+      det.noiseRange   = noiseHandle  ->getRange(id);
+      det.gainRange    = gainHandle   ->getRange(id);
+      det.qualityRange = qualityHandle->getRange(id);
+      det.quality = qualityHandle.product();
+      return det;
+    } else {
 #ifdef NOT_ON_MONTECARLO
-    edm::LogWarning("StripClusterizerAlgorithm") 
-      <<"id " << id << " not connected. this is impossible on data "
-      << "old id " << detId << std::endl;
+      edm::LogWarning("StripClusterizerAlgorithm")
+        <<"id " << id << " not connected. this is impossible on data "
+        << "old id " << detId << std::endl;
 #endif
-    return Det();
+      return Det();
+    }
   }
   Det det;
   det.ind = p-detIds.begin();

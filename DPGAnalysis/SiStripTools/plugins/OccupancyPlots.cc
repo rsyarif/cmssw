@@ -259,7 +259,7 @@ OccupancyPlots::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup) {
 
     if(det->det()!=DetId::Tracker) continue;
 
-    edm::LogInfo("DetIdFromGeometry") << det->rawId();
+    //edm::LogInfo("DetIdFromGeometry") << det->rawId();
 
     GlobalPoint position = trkgeo->idToDet(*det)->toGlobal(center);
     GlobalPoint zpos = trkgeo->idToDet(*det)->toGlobal(locz);
@@ -270,13 +270,26 @@ OccupancyPlots::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup) {
     GlobalVector dx = xpos - position;
     GlobalVector dy = ypos - position;
 
+
+    std::cout << "" <<std::endl; //added by rizki
+    //std::cout << "detID:" <<det->rawId() << ", position: "<< position << ", post vect: "<< posvect << ".perp():	" << posvect.perp() << "sqrt(x^2+y^2):	"<< sqrt( posvect.x() * posvect.x() + posvect.y() * posvect.y() )<<std::endl; //added by rizki
+    //std::cout << "detID:" <<det->rawId() << ", post vect: "<< posvect << ",	.perp():	" << posvect.perp() << ",	sqrt(x^2+y^2):	"<< sqrt( posvect.x() * posvect.x() + posvect.y() * posvect.y() )<<std::endl; //added by rizki
+    std::cout << "detID:" <<det->rawId() << ", post vect: "<< posvect << ",	sqrt(x^2+y^2):	"<< sqrt( posvect.x() * posvect.x() + posvect.y() * posvect.y() )<<std::endl; //added by rizki
+    //std::cout << "	xpos/ypos/zpos:		" << "			/	" << xpos << "	/	" << ypos << "	/	" << zpos << std::endl; //added by rizki
+    std::cout << "	dx/dy/dz:			" << "			/	" << dx << "		/	" << dy << "		/	" << dz << std::endl; //added by rizki
+
     double dzdr = posvect.perp()>0 ? (dz.x()*posvect.x()+dz.y()*posvect.y())/posvect.perp() : 0. ;
     double dxdr = posvect.perp()>0 ? (dx.x()*posvect.x()+dx.y()*posvect.y())/posvect.perp() : 0. ;
     double dydr = posvect.perp()>0 ? (dy.x()*posvect.x()+dy.y()*posvect.y())/posvect.perp() : 0. ;
 
+    //std::cout << "	dxdr/dydr/dzdr:		" << "			/	" << dxdr << "					/		" << dydr << "		/	" << dzdr << std::endl; //added by rizki
+
     double dzdrphi = posvect.perp()>0 ? (dz.y()*posvect.x()-dz.x()*posvect.y())/posvect.perp() : 0. ;
     double dxdrphi = posvect.perp()>0 ? (dx.y()*posvect.x()-dx.x()*posvect.y())/posvect.perp() : 0. ;
     double dydrphi = posvect.perp()>0 ? (dy.y()*posvect.x()-dy.x()*posvect.y())/posvect.perp() : 0. ;
+
+    //std::cout << "	dxdrphi/dydrphi/dzdrphi:	" << "	/	" << dxdrphi << "					/		" << dydrphi << "		/	" << dzdrphi << std::endl; //added by rizki
+
 
      for(std::map<unsigned int,DetIdSelector>::const_iterator sel=m_wantedsubdets.begin();sel!=m_wantedsubdets.end();++sel) {
 

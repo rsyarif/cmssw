@@ -37,7 +37,8 @@ XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
     'Geometry/TrackerCommonData/data/CRack/trackerStructureTopology.xml',
     'Geometry/TrackerCommonData/data/CRack/trackersens_2DS_5SS6_5SS4.xml',
     'Geometry/TrackerCommonData/data/CRack/trackerRecoMaterial_2DS_5SS6_5SS4.xml',
-    'Geometry/TrackerCommonData/data/CRack/trackerProdCuts_2DS_5SS6_5SS4.xml'
+    'Geometry/TrackerCommonData/data/CRack/trackerProdCuts_2DS_5SS6_5SS4.xml',
+    'Geometry/TrackerCommonData/data/CRack/trackerParameters.xml' #NEED to check! added by Andrea/Rizki. eventually need to modify this file.
   ),
   rootNodeName = cms.string('cms:OCMS')
 )
